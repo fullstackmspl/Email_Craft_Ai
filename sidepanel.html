@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EmailCraft AI</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="sidepanel.css" />
+</head>
+<body>
+  <div id="app">
+
+    <!-- Header -->
+    <header class="header">
+      <div class="logo">
+        <span class="logo-icon">✦</span>
+        <span class="logo-text">EmailCraft AI</span>
+      </div>
+      <div class="header-right">
+        <div class="privacy-badge" title="Your API key stays on your device.">
+          🔒 Privacy-first
+        </div>
+        <button class="settings-btn" id="settingsToggle" title="Settings">⚙</button>
+      </div>
+    </header>
+
+    <div class="app-body">
+      <nav class="nav-tabs" id="navTabs">
+        <button class="nav-tab active" data-tab="compose">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="tab-icon"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+          Compose
+        </button>
+        <button class="nav-tab" data-tab="reply">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="tab-icon"><polyline points="9 17 4 12 9 7"></polyline><path d="M20 18v-2a4 4 0 0 0-4-4H4"></path></svg>
+          Reply
+        </button>
+        <button class="nav-tab" data-tab="tools">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="tab-icon"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg>
+          Tools
+        </button>
+        <button class="nav-tab" data-tab="vault">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="tab-icon"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+          Vault
+        </button>
+      </nav>
+
+      <!-- Main Content Card -->
+      <main class="content-card">
+
+    <!-- Settings Panel -->
+    <div class="settings-panel hidden" id="settingsPanel">
+      <h3 class="settings-title">Settings</h3>
+
+      <!-- Provider Tabs -->
+      <div class="form-group">
+        <label class="label">AI Provider <span class="badge-local">Stored locally</span></label>
+        <div class="provider-tabs" id="providerTabs">
+          <button class="provider-tab active" data-provider="anthropic">Anthropic</button>
+          <button class="provider-tab" data-provider="gemini">Gemini</button>
+          <button class="provider-tab" data-provider="groq">Groq</button>
+          <button class="provider-tab" data-provider="openai">OpenAI</button>
+        </div>
+      </div>
+
+      <div class="provider-config" id="config-anthropic">
+        <div class="form-group">
+          <label class="label">API Key</label>
+          <input type="password" id="key-anthropic" class="input" placeholder="sk-ant-api03-..." />
+          <p class="hint">→ console.anthropic.com/keys</p>
+        </div>
+        <div class="form-group">
+          <label class="label">Model</label>
+          <select id="model-anthropic" class="select">
+            <option value="claude-sonnet-4-20250514">Claude Sonnet 4 (recommended)</option>
+            <option value="claude-opus-4-5">Claude Opus 4.5</option>
+            <option value="claude-haiku-4-5-20251001">Claude Haiku 4.5 (fastest)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="provider-config hidden" id="config-gemini">
+        <div class="form-group">
+          <label class="label">API Key</label>
+          <input type="password" id="key-gemini" class="input" placeholder="AIza..." />
+          <p class="hint">→ aistudio.google.com/apikey (free tier available)</p>
+        </div>
+        <div class="form-group">
+          <label class="label">Model</label>
+          <select id="model-gemini" class="select">
+            <option value="gemini-2.0-flash">Gemini 2.0 Flash (recommended)</option>
+            <option value="gemini-1.5-pro">Gemini 1.5 Pro</option>
+            <option value="gemini-1.5-flash">Gemini 1.5 Flash (fastest)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="provider-config hidden" id="config-groq">
+        <div class="form-group">
+          <label class="label">API Key</label>
+          <input type="password" id="key-groq" class="input" placeholder="gsk_..." />
+          <p class="hint">→ console.groq.com/keys (generous free tier!)</p>
+        </div>
+        <div class="form-group">
+          <label class="label">Model</label>
+          <select id="model-groq" class="select">
+            <option value="llama-3.3-70b-versatile">Llama 3.3 70B (recommended)</option>
+            <option value="llama-3.1-8b-instant">Llama 3.1 8B (fastest)</option>
+            <option value="mixtral-8x7b-32768">Mixtral 8x7B</option>
+            <option value="gemma2-9b-it">Gemma 2 9B</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="provider-config hidden" id="config-openai">
+        <div class="form-group">
+          <label class="label">API Key</label>
+          <input type="password" id="key-openai" class="input" placeholder="sk-proj-..." />
+          <p class="hint">→ platform.openai.com/api-keys</p>
+        </div>
+        <div class="form-group">
+          <label class="label">Model</label>
+          <select id="model-openai" class="select">
+            <option value="gpt-4o">GPT-4o (recommended)</option>
+            <option value="gpt-4o-mini">GPT-4o Mini (fastest)</option>
+            <option value="gpt-4-turbo">GPT-4 Turbo</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="label">App Theme</label>
+        <select id="appTheme" class="select">
+          <option value="obsidian">Obsidian (Classic Dark)</option>
+          <option value="lavender">Lavender Soft</option>
+          <option value="midnight">Midnight Glow</option>
+          <option value="mint">Mint Clean</option>
+          <option value="sunset">Warm Sunset</option>
+          <option value="ocean">Ocean Breeze</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="label">Your Name (for email sign-offs)</label>
+        <input type="text" id="userNameInput" class="input" placeholder="e.g. Alex Johnson" />
+      </div>
+
+      <div class="form-group">
+        <label class="label">Default Tone</label>
+        <select id="defaultTone" class="select">
+          <option value="professional">Professional</option>
+          <option value="friendly">Friendly &amp; Warm</option>
+          <option value="formal">Formal</option>
+          <option value="casual">Casual</option>
+          <option value="assertive">Assertive</option>
+        </select>
+      </div>
+
+      <button class="btn-primary full-width" id="saveSettings">Save Settings</button>
+      <div class="settings-status hidden" id="settingsStatus">✓ Settings saved!</div>
+    </div>
+
+    <!-- Nav Tabs removed from here, now in sidebar -->
+
+    <!-- ═══════════════════════════════════════════════ -->
+    <!-- TAB: COMPOSE -->
+    <!-- ═══════════════════════════════════════════════ -->
+    <div class="tab-content active" id="tab-compose">
+
+      <!-- Page Context Strip -->
+      <div class="context-strip" id="contextStrip">
+        <div class="context-strip-inner">
+          <span class="context-icon" id="contextIcon">📄</span>
+          <div class="context-info">
+            <div class="context-title" id="contextTitle">Loading page context…</div>
+            <div class="context-url" id="contextUrl"></div>
+          </div>
+          <button class="context-refresh" id="refreshContext" title="Re-read page">↺</button>
+        </div>
+        <div class="context-strip-footer">
+          <label class="toggle-row">
+            <input type="checkbox" id="usePageContext" checked />
+            <span class="toggle-label">Use page as context</span>
+          </label>
+          <button class="btn-xs clear-btn" id="clearSessionBtn" title="Clear temporary session history">🧹 Clear Session</button>
+        </div>
+      </div>
+
+      <!-- Compose Controls -->
+      <div class="compose-controls">
+        <div class="control-row">
+          <div class="form-group half">
+            <label class="label">Tone</label>
+            <select id="composeTone" class="select">
+              <option value="professional">Professional</option>
+              <option value="friendly">Friendly</option>
+              <option value="formal">Formal</option>
+              <option value="casual">Casual</option>
+              <option value="assertive">Assertive</option>
+              <option value="empathetic">Empathetic</option>
+              <option value="persuasive">Persuasive</option>
+            </select>
+          </div>
+          <div class="form-group half">
+            <label class="label">Length</label>
+            <select id="composeLength" class="select">
+              <option value="concise">Concise</option>
+              <option value="medium" selected>Medium</option>
+              <option value="detailed">Detailed</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="label">Recipient (optional)</label>
+          <input type="text" id="recipientInput" class="input" placeholder="Name, company, or role (auto-filled from page)" />
+        </div>
+
+        <div class="form-group">
+          <label class="label">What do you want to say? <span class="hint-inline">Be brief — AI fills it in</span></label>
+          <textarea id="userPrompt" class="textarea" rows="3" placeholder="e.g. &quot;Ask for a 30-min intro call to discuss their product&quot;"></textarea>
+        </div>
+
+        <div class="action-row">
+          <button class="btn-primary" id="generateEmail">
+            <span class="btn-icon btn-generate-icon"></span> Generate Email
+          </button>
+          <button class="btn-ghost" id="generateSubjects" title="Generate subject lines">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="btn-icon"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="9" y1="3" x2="9" y2="21"></line></svg> Subjects
+          </button>
+        </div>
+      </div>
+
+      <!-- Loading State -->
+      <div class="loading-state hidden" id="composeLoading">
+        <div class="loading-dots">
+          <span></span><span></span><span></span>
+        </div>
+        <div class="loading-text" id="loadingText">Crafting your email…</div>
+      </div>
+
+      <!-- Output -->
+      <div class="output-panel hidden" id="composeOutput">
+
+        <!-- Subject Lines (shown when generated) -->
+        <div class="subjects-panel hidden" id="subjectsPanel">
+          <div class="panel-label">Subject Lines — click to use</div>
+          <div class="subjects-list" id="subjectsList"></div>
+        </div>
+
+        <!-- Sentiment Meter -->
+        <div class="sentiment-bar" id="sentimentBar">
+          <span class="sentiment-label" id="sentimentLabel">Tone Analysis</span>
+          <div class="sentiment-track">
+            <div class="sentiment-fill" id="sentimentFill"></div>
+          </div>
+          <span class="sentiment-value" id="sentimentValue"></span>
+        </div>
+
+        <!-- Subject Line Display -->
+        <div class="output-subject" id="outputSubjectRow">
+          <span class="subject-label">Subject:</span>
+          <span id="outputSubject" class="subject-text"></span>
+        </div>
+
+        <!-- Email Body -->
+        <div class="output-header">
+          <span class="output-label">Generated Email</span>
+          <div class="output-actions">
+            <button class="btn-xs btn-insert" id="insertEmail" title="Insert directly into email compose box">↗ Insert</button>
+            <button class="btn-xs" id="saveToVault">💾 Save</button>
+            <button class="btn-xs" id="copyEmail">📋 Copy</button>
+          </div>
+        </div>
+        <div class="email-output" id="emailOutput" contenteditable="true"></div>
+
+        <div class="refine-row">
+          <input type="text" id="refineInput" class="input" placeholder="Refine: &quot;Make it shorter&quot; or &quot;Add a call to action&quot;" />
+          <button class="btn-sm" id="refineEmail">→</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════ -->
+    <!-- TAB: SMART REPLY -->
+    <!-- ═══════════════════════════════════════════════ -->
+    <div class="tab-content hidden" id="tab-reply">
+      <div class="tab-intro">
+        <h3 class="tab-title">Smart Reply</h3>
+        <p class="tab-desc">Paste a received email. AI reads its tone, intent, and context — then drafts the perfect reply.</p>
+      </div>
+
+      <div class="form-group">
+        <label class="label">Paste the email you received</label>
+        <textarea id="receivedEmail" class="textarea" rows="6" placeholder="Paste the full email here…"></textarea>
+      </div>
+
+      <div class="control-row">
+        <div class="form-group half">
+          <label class="label">Reply Tone</label>
+          <select id="replyTone" class="select">
+            <option value="match">Match sender's tone</option>
+            <option value="professional">Professional</option>
+            <option value="warm">Warm & Friendly</option>
+            <option value="assertive">Assertive</option>
+            <option value="brief">Brief & Direct</option>
+          </select>
+        </div>
+        <div class="form-group half">
+          <label class="label">Reply Goal</label>
+          <select id="replyGoal" class="select">
+            <option value="accept">Accept / Agree</option>
+            <option value="decline">Politely Decline</option>
+            <option value="negotiate">Negotiate / Counter</option>
+            <option value="request_info">Request Info</option>
+            <option value="follow_up">Follow Up</option>
+            <option value="custom">Custom (below)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="label">Any specific points to include? <span class="hint-inline">Optional</span></label>
+        <textarea id="replyNotes" class="textarea" rows="2" placeholder="e.g. &quot;Mention I'm available next Tuesday&quot;"></textarea>
+      </div>
+
+      <button class="btn-primary full-width" id="generateReply">
+        <span class="btn-icon">↩</span> Draft Reply
+      </button>
+
+      <div class="loading-state hidden" id="replyLoading">
+        <div class="loading-dots"><span></span><span></span><span></span></div>
+        <div class="loading-text">Reading the email & drafting reply…</div>
+      </div>
+
+      <div class="output-panel hidden" id="replyOutput">
+        <div class="output-header">
+          <span class="output-label">Drafted Reply</span>
+          <div class="output-actions">
+            <button class="btn-xs btn-insert" id="insertReply" title="Insert directly into email compose box">↗ Insert</button>
+            <button class="btn-xs" id="saveReplyToVault">💾 Save</button>
+            <button class="btn-xs" id="copyReply">📋 Copy</button>
+          </div>
+        </div>
+        <div class="email-output" id="replyEmailOutput" contenteditable="true"></div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════ -->
+    <!-- TAB: TOOLS -->
+    <!-- ═══════════════════════════════════════════════ -->
+    <div class="tab-content hidden" id="tab-tools">
+
+      <!-- Tool: Email Chain Summarizer -->
+      <div class="tool-card" id="toolSummarizer">
+        <div class="tool-header" data-tool="summarizer">
+          <div class="tool-icon">🧵</div>
+          <div class="tool-info">
+            <div class="tool-name">Email Chain Summarizer</div>
+            <div class="tool-desc">Paste a long thread → get TL;DR + smart reply</div>
+          </div>
+          <span class="tool-arrow">›</span>
+        </div>
+        <div class="tool-body hidden">
+          <textarea id="chainInput" class="textarea" rows="6" placeholder="Paste the full email thread here…"></textarea>
+          <button class="btn-primary full-width" id="summarizeChain">Summarize & Suggest Reply</button>
+          <div class="loading-state hidden" id="summarizeLoading">
+            <div class="loading-dots"><span></span><span></span><span></span></div>
+            <div class="loading-text">Reading thread…</div>
+          </div>
+          <div class="output-panel hidden" id="summarizeOutput">
+            <div class="output-label">Summary</div>
+            <div class="tool-output" id="summarizeResult"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tool: Commitment Tracker -->
+      <div class="tool-card" id="toolCommitments">
+        <div class="tool-header" data-tool="commitments">
+          <div class="tool-icon">📌</div>
+          <div class="tool-info">
+            <div class="tool-name">Commitment Tracker</div>
+            <div class="tool-desc">Find promises & action items in any email</div>
+          </div>
+          <span class="tool-arrow">›</span>
+        </div>
+        <div class="tool-body hidden">
+          <textarea id="commitmentInput" class="textarea" rows="5" placeholder="Paste an email to extract commitments & action items…"></textarea>
+          <button class="btn-primary full-width" id="trackCommitments">Extract Commitments</button>
+          <div class="loading-state hidden" id="commitmentLoading">
+            <div class="loading-dots"><span></span><span></span><span></span></div>
+            <div class="loading-text">Analyzing…</div>
+          </div>
+          <div class="output-panel hidden" id="commitmentOutput">
+            <div class="tool-output" id="commitmentResult"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tool: Follow-up Drafter -->
+      <div class="tool-card" id="toolFollowup">
+        <div class="tool-header" data-tool="followup">
+          <div class="tool-icon">📅</div>
+          <div class="tool-info">
+            <div class="tool-name">Follow-up Drafter</div>
+            <div class="tool-desc">Draft a gentle follow-up for an unanswered email</div>
+          </div>
+          <span class="tool-arrow">›</span>
+        </div>
+        <div class="tool-body hidden">
+          <textarea id="followupInput" class="textarea" rows="4" placeholder="Paste your original sent email…"></textarea>
+          <div class="form-group">
+            <label class="label">Days since sent</label>
+            <input type="number" id="followupDays" class="input" value="5" min="1" max="90" />
+          </div>
+          <button class="btn-primary full-width" id="draftFollowup">Draft Follow-up</button>
+          <div class="loading-state hidden" id="followupLoading">
+            <div class="loading-dots"><span></span><span></span><span></span></div>
+            <div class="loading-text">Drafting…</div>
+          </div>
+          <div class="output-panel hidden" id="followupOutput">
+            <div class="output-header">
+              <span class="output-label">Follow-up Email</span>
+              <button class="btn-xs" id="copyFollowup">📋 Copy</button>
+            </div>
+            <div class="email-output" id="followupEmailOutput" contenteditable="true"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tool: Tone & Sentiment Analyzer -->
+      <div class="tool-card" id="toolSentiment">
+        <div class="tool-header" data-tool="sentiment">
+          <div class="tool-icon">🎭</div>
+          <div class="tool-info">
+            <div class="tool-name">Tone & Sentiment Analyzer</div>
+            <div class="tool-desc">Understand how your email will be perceived</div>
+          </div>
+          <span class="tool-arrow">›</span>
+        </div>
+        <div class="tool-body hidden">
+          <textarea id="sentimentInput" class="textarea" rows="5" placeholder="Paste your draft email to analyze…"></textarea>
+          <button class="btn-primary full-width" id="analyzeSentiment">Analyze Tone</button>
+          <div class="loading-state hidden" id="sentimentLoading">
+            <div class="loading-dots"><span></span><span></span><span></span></div>
+            <div class="loading-text">Analyzing tone…</div>
+          </div>
+          <div class="output-panel hidden" id="sentimentOutput">
+            <div class="tool-output" id="sentimentResult"></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ═══════════════════════════════════════════════ -->
+    <!-- TAB: VAULT (RAG) -->
+    <!-- ═══════════════════════════════════════════════ -->
+    <div class="tab-content hidden" id="tab-vault">
+      <div class="tab-intro">
+        <h3 class="tab-title">Style Vault <span class="badge-local">100% Local</span></h3>
+        <p class="tab-desc">Save emails to teach the AI your writing style. Stored only on your device — never uploaded.</p>
+      </div>
+
+      <div class="vault-search-row">
+        <input type="text" id="vaultSearch" class="input" placeholder="Search your saved emails…" />
+      </div>
+
+      <div class="vault-add-section">
+        <div class="vault-add-header" id="vaultAddToggle">
+          <span>+ Add email to Vault</span>
+        </div>
+        <div class="vault-add-body hidden" id="vaultAddBody">
+          <input type="text" id="vaultTitle" class="input" placeholder="Label (e.g. &quot;Cold outreach to investors&quot;)" />
+          <select id="vaultCategory" class="select">
+            <option value="style">Writing Style Sample</option>
+            <option value="template">Reusable Template</option>
+            <option value="cold_outreach">Cold Outreach</option>
+            <option value="follow_up">Follow-up</option>
+            <option value="decline">Polite Decline</option>
+            <option value="intro">Introduction</option>
+            <option value="other">Other</option>
+          </select>
+          <textarea id="vaultEmailText" class="textarea" rows="5" placeholder="Paste the email here…"></textarea>
+          <button class="btn-primary full-width" id="saveToVaultBtn">Save to Vault</button>
+        </div>
+      </div>
+
+      <div class="vault-list" id="vaultList">
+        <div class="vault-empty" id="vaultEmpty">
+          <div class="vault-empty-icon">📭</div>
+          <div>No emails saved yet.</div>
+          <div class="hint">Add some emails above to train the AI on your style.</div>
+        </div>
+      </div>
+    </div>
+
+      </div>
+    </main> <!-- End content-card -->
+  </div> <!-- End app-body -->
+
+  <!-- Toast Notification -->
+  <div class="toast hidden" id="toast"></div>
+</div>
+
+  <script src="sidepanel.js"></script>
+</body>
+</html>
